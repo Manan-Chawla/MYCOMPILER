@@ -1,0 +1,1344 @@
+#include<iostream>
+#include<stdlib.h>
+using namespace std;   // if you run this in dev c++ it will run successfully as is not running becz
+                       // there are some files not available in this compiler 
+                       // but yes this program is right
+class Node
+{
+    public:
+    int data;
+    Node *next;
+};
+int size = 0;
+void insert(Node** head, int data)
+{
+    Node* new_node = new Node();
+    
+    new_node->data = data;
+    new_node->next = *head;
+    *head = new_node;
+    size++;
+}
+void insertPosition(int pos, int data, Node** head)
+{
+    Node* new_node = new Node();
+    new_node->data = data;
+    new_node->next = NULL;
+    if(pos < 1 || pos > size + 1) 
+    {
+    	    cout<<"Invalid\n";
+	}
+    else if(pos == 1)
+	{
+        new_node->next = *head; 
+        *head = new_node;
+        size++;
+    }
+    else 
+    {
+        Node* temp = *head;
+        while(--pos > 1)
+		{
+            temp = temp->next;
+        }
+        new_node->next= temp->next;
+        temp->next = new_node;
+        size++;
+    }
+}
+void display(Node* node)
+{
+    
+    cout<<"Linked List : "<<endl;
+    while(node!=NULL)
+	{
+        cout<<node->data<<",";
+        node = node->next;
+    }
+    cout<<"\n";
+}
+int main()
+{
+    Node* head = NULL;
+    insert(&head, 140);
+    insert(&head, 120);
+    insert(&head, 80);
+    insert(&head, 60);
+    insert(&head, 20);
+    display(head);
+    insertPosition(2, 40, &head);
+    insertPosition(5, 100, &head);
+    insertPosition(8, 160, &head);
+    display(head); 
+    return 0; 
+}
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+#include<iostream>
+#include<stdlib.h>
+using namespace std;
+struct node
+{
+	int data;
+	struct node*link;
+};
+void count_of_node(struct node *head)
+{
+	int count=0;
+	if(head==NULL)
+	{
+		cout<<"linked list is empty";
+	}
+	struct node *ptr=NULL;
+	ptr=head;
+	while(ptr!= NULL)
+	{
+		count++;
+		ptr=ptr->link;
+	}
+	cout<<count<<endl;
+}
+void count_of_node1(struct node *tail)
+{
+	int count=0;
+	if(tail==NULL)
+	{
+		cout<<"linked list is empty";
+	}
+	struct node *ptr=NULL;
+	ptr=tail;
+	while(ptr!= NULL)
+	{
+		count++;
+		ptr=ptr->link;
+	}
+	cout<<count<<endl;
+}
+int main()
+{
+	struct node*head=NULL;
+	head=(struct node*)malloc(sizeof(struct node));
+	head->data=100;
+	head->link=NULL;
+	cout<<"The first entry of the linked list is :- "<<head->data<<endl;
+	cout<<"-------------------------------------"<<endl;
+	struct node*tail=NULL;
+	tail=(struct node*)malloc(sizeof(struct node));
+	tail->data=200;
+	tail->link=NULL;
+	cout<<"The second entry of the linked list is :- "<<tail->data<<endl;
+	cout<<"--------------------------------------"<<endl;
+	struct node*three=NULL;
+	three=(struct node*)malloc(sizeof(struct node));
+	three->data=300;
+	three->link=NULL;
+	cout<<"The third entry of the linked list is :- "<<three->data<<endl;
+	cout<<"--------------------------------------"<<endl;
+	count_of_node(head);
+	count_of_node1(tail);
+	return 0;
+}
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+#include<iostream>
+#include<stdlib.h>
+using namespace std;
+struct node
+{
+	int data;
+	struct node *link;
+};
+struct node* add_beg(struct node* head,int d)
+{
+	struct node*ptr=NULL;
+	ptr= (struct node*)malloc(sizeof(struct node));
+	ptr->data=d;
+	ptr->link=NULL;
+	
+	ptr->link= head;
+	head=ptr;
+	return head;
+}
+int main()
+{
+	struct node*head=NULL;
+	head=(struct node*)malloc(sizeof(struct node));
+	head->data=45;
+	head->link=NULL;
+	
+	struct node*ptr=NULL;
+	ptr=(struct node*)malloc(sizeof(struct node));
+	ptr->data=98;
+	ptr->link=NULL;
+	
+	head->link=ptr;
+	
+	int data=3;
+	head=add_beg(head,data);
+	ptr=head;
+	while(ptr!=NULL)
+	{
+		cout<<ptr->data<<endl;
+		ptr=ptr->link;
+	}
+	return 0;
+}
+
+
+
+---------------------------------------------------------------------------------------------------
+
+
+#include <iostream>
+#include<stdlib.h>   
+#include<stdio.h>
+using namespace std;      // program is right but not running in this compiler but it's running in the
+                          // dev c++
+struct node
+{
+    int data;
+    struct node* next;
+};
+
+struct node* add_at_empty(int data)
+{
+    struct node* temp=NULL;
+    temp=(struct node*)malloc(sizeof(struct node));
+    temp->data=data;
+    temp->next=temp;
+    return temp;
+};
+
+struct node* add_at_beg(struct node* tail,int data)
+{
+    struct node* newP=NULL;
+    newP=(struct node*)malloc(sizeof(struct node));
+    newP->data=data;
+    newP->next=tail->next;
+    tail->next=newP;
+    return tail;
+};
+
+struct node* add_at_end(struct node* tail,int data)
+{
+    struct node* newP=NULL;
+    newP=(struct node*)malloc(sizeof(struct node));
+    newP->data=data;
+    newP->next=NULL;
+    newP->next=tail->next;
+    tail->next=newP;
+    tail=tail->next;
+    return tail;
+};
+
+struct node* after_pos(struct node* tail,int data,int pos)
+{
+    struct node* p=tail->next;
+    struct node*newp=NULL;
+    newp=(struct node*)malloc(sizeof(struct node));
+    newp->data=data;
+    newp->next=NULL;
+    while(pos>1)
+    {
+        p=p->next;
+        pos--;
+    }
+    newp->next=p->next;
+    p->next=newp;
+    if(p==tail)
+    {
+        tail=tail->next;
+    }
+    return tail;
+};
+
+struct node* create_list(struct node* tail)
+{
+    int i,n,data;
+    cout<<"Enter number of nodes in the list"<<endl;
+    cin>>n;
+    if(n==0)
+       return tail;
+    else
+    cout<<"Enter the element in 1:"<<endl;
+    cin>>data;
+    tail=add_at_empty(data);
+    for(i=1;i<n;i++)
+    {
+        cout<<"enter the element "<<i+1<<endl;
+        cin>>data;
+        tail=add_at_end(tail,data);
+    }
+    return tail;
+};
+
+
+void print(struct node* tail)
+{
+    if(tail==NULL)
+    cout<<"No nodes in the list"<<endl;
+    else
+    {
+    struct node* P=tail->next;
+    do
+    {
+     cout<<P->data<<endl;
+     P=P->next;
+    }while(P!=tail->next);
+    }
+}
+
+int main()
+{
+    struct node*tail=NULL;
+    tail=create_list(tail);
+    print(tail);
+    return 0;
+}
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+#include <iostream>
+#include<stdlib.h>
+using namespace std;
+struct node
+{
+    int data;
+    struct node* next;
+};
+
+struct node* add_at_empty(int data)
+{
+    struct node* temp=NULL;
+    temp=(struct node*)malloc(sizeof(struct node));
+    temp->data=data;
+    temp->next=temp;
+    return temp;
+};
+
+struct node* add_at_beg(struct node* tail,int data)
+{
+    struct node* newP=NULL;
+    newP=(struct node*)malloc(sizeof(struct node));
+    newP->data=data;
+    newP->next=tail->next;
+    tail->next=newP;
+    return tail;
+};
+
+struct node* add_at_end(struct node* tail,int data)
+{
+    struct node* newP=NULL;
+    newP=(struct node*)malloc(sizeof(struct node));
+    newP->data=data;
+    newP->next=NULL;
+    newP->next=tail->next;
+    tail->next=newP;
+    tail=tail->next;
+    return tail;
+};
+
+struct node* after_pos(struct node* tail,int data,int pos)
+{
+    struct node* p=tail->next;
+    struct node*newp=NULL;
+    newp=(struct node*)malloc(sizeof(struct node));
+    newp->data=data;
+    newp->next=NULL;
+    while(pos>1)
+    {
+        p=p->next;
+        pos--;
+    }
+    newp->next=p->next;
+    p->next=newp;
+    if(p==tail)
+    {
+        tail=tail->next;
+    }
+    return tail;
+};
+
+void print(struct node* tail)
+{
+    struct node* P=tail->next;
+    do
+    {
+     cout<<P->data<<endl;
+     P=P->next;
+    }while(P!=tail->next);
+}
+
+int main()
+{
+    struct node*tail;
+    tail=add_at_empty(100);
+    tail=add_at_beg(tail,200);
+    tail=add_at_end(tail,50);
+    tail=add_at_end(tail,0);
+    print(tail);
+    cout<<"After adding at any position"<<endl;
+    tail=after_pos(tail,10,2);
+    print(tail);
+    return 0;
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#include<iostream>
+#include<stdio.h>
+#include<stdlib.h>
+using namespace std;
+struct node
+{
+    struct node* prev;
+    int data;
+    struct node* next;
+};
+struct node* add_to_empty(struct node* head,int data)
+{
+	struct node* temp=NULL;
+	temp=(struct node*)malloc(sizeof(struct node));
+	temp->prev=NULL;
+	temp->data=data;
+	temp->next=NULL;  // for inserting the data in node using its node 
+	head=temp;
+	return head;
+};
+
+struct node* add_at_beg(struct node* head,int data)
+{
+	struct node*temp=NULL;
+	temp=(struct node*)malloc(sizeof(struct node));
+	temp->prev=NULL;
+	temp->data=data;
+	temp->next=NULL;   // for inserting the data in the begining of list
+	temp->next=head;
+	head->prev=temp;
+	head=temp;
+	return head;
+};
+
+struct node* add_at_end(struct node* head,int data)
+{
+	struct node*temp=NULL;
+	struct node* tp;
+	temp=(struct node*)malloc(sizeof(struct node));
+	temp->prev=NULL;                        
+	temp->data=data;                 // for inserting data at end
+	temp->next=NULL;
+	tp=head;
+	while(tp->next !=NULL)
+		tp=tp->next;
+		tp->next=temp;
+		temp->prev=tp;
+	return head;
+};
+ 
+struct node* add_after_pos(struct node* head,int data,int position)
+{
+    struct node* newP=NULL;
+    struct node* temp=head;
+    struct node* temp2=NULL;
+    newP=add_to_empty(newP,data);
+    while(position!=1)
+    {
+        temp=temp->next;
+        position--;
+    }
+    if(temp->next=newP)
+    {
+        temp->next=newP;
+        newP->prev=temp;
+    }
+    else
+    {
+        temp2=temp ->next;
+        temp->next=newP;
+        temp->prev=newP;
+        newP->next=temp2;
+        newP->prev=temp;
+    }
+    return head;
+};
+
+struct node* add_before_pos(struct node* head, int data,int position)
+{
+    struct node* newP=NULL;
+    struct node* temp=head;
+    struct node* temp2=NULL;
+    newP=add_to_empty(newP,data);
+    int pos=position;
+    while(pos>2)
+    {
+        temp=temp->next;
+        pos--;
+    }
+    if(position==1)
+    {
+        head=add_at_beg(head,data);
+    }
+    else
+    {
+        temp2=temp->next;
+        temp->next=newP;
+        temp2->prev=newP;
+        newP->next=temp2;
+        newP->prev=temp;
+    }
+    return head;
+};
+struct node* del_first(struct node* head)
+{
+    struct node* temp=head;
+    head=head->next;
+    free(temp);
+    temp=NULL;
+    head->prev=NULL;
+    return head;
+};
+
+struct node* del_last(struct node * head)
+{
+    struct node* temp=head;
+    struct node* temp2;
+    while(temp->next!=NULL)
+         temp=temp->next;
+    temp2=temp->prev;
+    temp2->next=NULL;
+    free(temp);
+    return head;
+};
+
+struct node* del_inter(struct node * head , int position)
+{
+    struct node* temp=head;
+    struct node* temp2=NULL;
+    if(position==1)
+    {
+        head=del_first(head);
+        return head;
+    }
+    while(position>1)
+    {
+        temp=temp->next;
+        position--;
+    }
+    if(temp->next=NULL)
+    {
+        head=del_last(head);
+    }
+    else
+    {
+        temp2=temp->prev;
+        temp2->next=temp->next;
+        temp->next->prev=temp2;
+        free(temp);
+        temp=NULL;
+    }
+    return head;
+};
+
+struct node* reverse(struct node* head)
+{
+  struct node* ptr1=head;
+  struct node* ptr2=ptr1->next;
+  ptr1->next=NULL;
+  ptr1->prev=ptr2;
+  while(ptr2!=NULL)
+  {
+      ptr2->prev=ptr2->next;
+      ptr2->next=ptr1;
+      ptr1=ptr2;
+      ptr2=ptr2->prev;
+  }
+  head=ptr1;
+  return head;
+};
+
+void print(struct node* head)
+{
+    struct node* ptr=head;
+    while(ptr!=NULL)
+    {
+        cout<<ptr->data<<endl;
+        ptr=ptr->next;
+    }
+    cout<<"\n";
+}
+
+int main()
+{
+    struct node* head=NULL;
+    struct node *ptr;
+    head=add_to_empty(head,34);
+    head=add_at_end(head,45);
+    head=add_at_end(head,9);
+    print(head);
+    cout<<"After reversing the list"<<endl;
+    head=reverse(head);
+    print(head);
+    return 0;
+}
+
+
+
+----------------------------------------------------------------------------------------------------------------
+
+#include<iostream>
+#include<stdio.h>
+#include<stdlib.h>
+using namespace std;
+struct node
+{
+    struct node* prev;
+    int data;
+    struct node* next;
+};
+struct node* add_to_empty(struct node* head,int data)
+{
+	struct node* temp=NULL;
+	temp=(struct node*)malloc(sizeof(struct node));
+	temp->prev=NULL;
+	temp->data=data;
+	temp->next=NULL;  // for inserting the data in node using its node 
+	head=temp;
+	return head;
+};
+
+struct node* add_at_beg(struct node* head,int data)
+{
+	struct node*temp=NULL;
+	temp=(struct node*)malloc(sizeof(struct node));
+	temp->prev=NULL;
+	temp->data=data;
+	temp->next=NULL;   // for inserting the data in the begining of list
+	temp->next=head;
+	head->prev=temp;
+	head=temp;
+	return head;
+};
+
+struct node* add_at_end(struct node* head,int data)
+{
+	struct node*temp=NULL;
+	struct node* tp;
+	temp=(struct node*)malloc(sizeof(struct node));
+	temp->prev=NULL;                        
+	temp->data=data;                 // for inserting data at end
+	temp->next=NULL;
+	tp=head;
+	while(tp->next !=NULL)
+		tp=tp->next;
+		tp->next=temp;
+		temp->prev=tp;
+	return head;
+};
+ 
+struct node* add_after_pos(struct node* head,int data,int position)
+{
+    struct node* newP=NULL;
+    struct node* temp=head;
+    struct node* temp2=NULL;
+    newP=add_to_empty(newP,data);
+    while(position!=1)
+    {
+        temp=temp->next;
+        position--;
+    }
+    if(temp->next=newP)
+    {
+        temp->next=newP;
+        newP->prev=temp;
+    }
+    else
+    {
+        temp2=temp ->next;
+        temp->next=newP;
+        temp->prev=newP;
+        newP->next=temp2;
+        newP->prev=temp;
+    }
+    return head;
+};
+
+struct node* add_before_pos(struct node* head, int data,int position)
+{
+    struct node* newP=NULL;
+    struct node* temp=head;
+    struct node* temp2=NULL;
+    newP=add_to_empty(newP,data);
+    int pos=position;
+    while(pos>2)
+    {
+        temp=temp->next;
+        pos--;
+    }
+    if(position==1)
+    {
+        head=add_at_beg(head,data);
+    }
+    else
+    {
+        temp2=temp->next;
+        temp->next=newP;
+        temp2->prev=newP;
+        newP->next=temp2;
+        newP->prev=temp;
+    }
+    return head;
+};
+struct node* del_first(struct node* head)
+{
+    struct node* temp=head;
+    head=head->next;
+    free(temp);
+    temp=NULL;
+    head->prev=NULL;
+    return head;
+};
+
+struct node* del_last(struct node * head)
+{
+    struct node* temp=head;
+    struct node* temp2;
+    while(temp->next!=NULL)
+         temp=temp->next;
+    temp2=temp->prev;
+    temp2->next=NULL;
+    free(temp);
+    return head;
+};
+
+struct node* del_inter(struct node * head , int position)
+{
+    struct node* temp=head;
+    struct node* temp2=NULL;
+    if(position==1)
+    {
+        head=del_first(head);
+        return head;
+    }
+    while(position>1)
+    {
+        temp=temp->next;
+        position--;
+    }
+    if(temp->next=NULL)
+    {
+        head=del_last(head);
+    }
+    else
+    {
+        temp2=temp->prev;
+        temp2->next=temp->next;
+        temp->next->prev=temp2;
+        free(temp);
+        temp=NULL;
+    }
+    return head;
+};
+
+void print(struct node* head)
+{
+    struct node* ptr=head;
+    while(ptr!=NULL)
+    {
+        cout<<ptr->data<<endl;
+        ptr=ptr->next;
+    }
+    cout<<"\n";
+}
+
+int main()
+{
+    struct node* head=NULL;
+    struct node *ptr;
+    head=add_to_empty(head,34);
+    head=add_at_end(head,45);
+    head=add_at_end(head,9);
+    cout<<"After deleting"<<endl;
+    head=del_inter(head,1);
+    print(head);
+    return 0;
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+#include<iostream>
+#include<stdio.h>
+#include<stdlib.h>
+using namespace std;
+struct node
+{
+    struct node* prev;
+    int data;
+    struct node* next;
+};
+struct node* add_to_empty(struct node* head,int data)
+{
+	struct node* temp=NULL;
+	temp=(struct node*)malloc(sizeof(struct node));
+	temp->prev=NULL;
+	temp->data=data;
+	temp->next=NULL;  // for inserting the data in node using its node 
+	head=temp;
+	return head;
+};
+
+struct node* add_at_beg(struct node* head,int data)
+{
+	struct node*temp=NULL;
+	temp=(struct node*)malloc(sizeof(struct node));
+	temp->prev=NULL;
+	temp->data=data;
+	temp->next=NULL;   // for inserting the data in the begining of list
+	temp->next=head;
+	head->prev=temp;
+	head=temp;
+	return head;
+};
+
+struct node* add_at_end(struct node* head,int data)
+{
+	struct node*temp=NULL;
+	struct node* tp;
+	temp=(struct node*)malloc(sizeof(struct node));
+	temp->prev=NULL;                        
+	temp->data=data;                 // for inserting data at end
+	temp->next=NULL;
+	tp=head;
+	while(tp->next !=NULL)
+		tp=tp->next;
+		tp->next=temp;
+		temp->prev=tp;
+	return head;
+};
+ 
+struct node* add_after_pos(struct node* head,int data,int position)
+{
+    struct node* newP=NULL;
+    struct node* temp=head;
+    struct node* temp2=NULL;
+    newP=add_to_empty(newP,data);
+    while(position!=1)
+    {
+        temp=temp->next;
+        position--;
+    }
+    if(temp->next=newP)
+    {
+        temp->next=newP;
+        newP->prev=temp;
+    }
+    else
+    {
+        temp2=temp ->next;
+        temp->next=newP;
+        temp->prev=newP;
+        newP->next=temp2;
+        newP->prev=temp;
+    }
+    return head;
+};
+
+struct node* add_before_pos(struct node* head, int data,int position)
+{
+    struct node* newP=NULL;
+    struct node* temp=head;
+    struct node* temp2=NULL;
+    newP=add_to_empty(newP,data);
+    int pos=position;
+    while(pos>2)
+    {
+        temp=temp->next;
+        pos--;
+    }
+    if(position==1)
+    {
+        head=add_at_beg(head,data);
+    }
+    else
+    {
+        temp2=temp->next;
+        temp->next=newP;
+        temp2->prev=newP;
+        newP->next=temp2;
+        newP->prev=temp;
+    }
+    return head;
+};
+struct node* del_first(struct node* head)
+{
+    struct node* temp=head;
+    head=head->next;
+    free(temp);
+    temp=NULL;
+    head->prev=NULL;
+    return head;
+};
+
+struct node* del_last(struct node * head)
+{
+    struct node* temp=head;
+    struct node* temp2;
+    while(temp->next!=NULL)
+         temp=temp->next;
+    temp2=temp->prev;
+    temp2->next=NULL;
+    free(temp);
+    return head;
+};
+
+
+void print(struct node* head)
+{
+    struct node* ptr=head;
+    while(ptr!=NULL)
+    {
+        cout<<ptr->data<<endl;
+        ptr=ptr->next;
+    }
+    cout<<"\n";
+}
+
+int main()
+{
+    struct node* head=NULL;
+    struct node *ptr;
+    head=add_to_empty(head,34);
+    head=add_at_end(head,45);
+    head=add_at_end(head,9);
+    cout<<"Before deleting node"<<endl;
+    print(head);
+    cout<<"After deleting ndoe"<<endl;
+    head=del_first(head);
+    print(head);
+    cout<<"after deleting the last node"<<endl;
+    head=del_last(head);
+    print(head);
+    return 0;
+}
+
+
+----------------------------------------------------------------------------------------------------------------------------
+#include<iostream>
+#include<stdio.h>
+#include<stdlib.h>
+using namespace std;
+struct node
+{
+    struct node* prev;
+    int data;
+    struct node* next;
+};
+struct node* add_to_empty(struct node* head,int data)
+{
+	struct node* temp=NULL;
+	temp=(struct node*)malloc(sizeof(struct node));
+	temp->prev=NULL;
+	temp->data=data;
+	temp->next=NULL;  // for inserting the data in node using its node 
+	head=temp;
+	return head;
+};
+
+struct node* add_at_beg(struct node* head,int data)
+{
+	struct node*temp=NULL;
+	temp=(struct node*)malloc(sizeof(struct node));
+	temp->prev=NULL;
+	temp->data=data;
+	temp->next=NULL;   // for inserting the data in the begining of list
+	temp->next=head;
+	head->prev=temp;
+	head=temp;
+	return head;
+};
+
+struct node* add_at_end(struct node* head,int data)
+{
+	struct node*temp=NULL;
+	struct node* tp;
+	temp=(struct node*)malloc(sizeof(struct node));
+	temp->prev=NULL;                        
+	temp->data=data;                 // for inserting data at end
+	temp->next=NULL;
+	tp=head;
+	while(tp->next !=NULL)
+		tp=tp->next;
+		tp->next=temp;
+		temp->prev=tp;
+	return head;
+};
+ 
+struct node* add_after_pos(struct node* head,int data,int position)
+{
+    struct node* newP=NULL;
+    struct node* temp=head;
+    struct node* temp2=NULL;
+    newP=add_to_empty(newP,data);
+    while(position!=1)
+    {
+        temp=temp->next;
+        position--;
+    }
+    if(temp->next=newP)
+    {
+        temp->next=newP;
+        newP->prev=temp;
+    }
+    else
+    {
+        temp2=temp ->next;
+        temp->next=newP;
+        temp->prev=newP;
+        newP->next=temp2;
+        newP->prev=temp;
+    }
+    return head;
+};
+
+struct node* add_before_pos(struct node* head, int data,int position)
+{
+    struct node* newP=NULL;
+    struct node* temp=head;
+    struct node* temp2=NULL;
+    newP=add_to_empty(newP,data);
+    int pos=position;
+    while(pos>2)
+    {
+        temp=temp->next;
+        pos--;
+    }
+    if(position==1)
+    {
+        head=add_at_beg(head,data);
+    }
+    else
+    {
+        temp2=temp->next;
+        temp->next=newP;
+        temp2->prev=newP;
+        newP->next=temp2;
+        newP->prev=temp;
+    }
+    return head;
+};
+struct node* del_first(struct node* head)
+{
+    struct node* temp=head;
+    head=head->next;
+    free(temp);
+    temp=NULL;
+    head->prev=NULL;
+    return head;
+};
+void print(struct node* head)
+{
+    struct node* ptr=head;
+    while(ptr!=NULL)
+    {
+        cout<<ptr->data<<endl;
+        ptr=ptr->next;
+    }
+    cout<<"\n";
+}
+
+int main()
+{
+    struct node* head=NULL;
+    struct node *ptr;
+    head=add_to_empty(head,34);
+    head=add_at_end(head,45);
+    head=add_at_end(head,9);
+    cout<<"Before deleting node"<<endl;
+    print(head);
+    cout<<"After deleting ndoe"<<endl;
+    head=del_first(head);
+    print(head);
+    return 0;
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+#include<iostream>
+#include<stdio.h>
+#include<stdlib.h>
+using namespace std;
+struct node
+{
+    struct node* prev;
+    int data;
+    struct node* next;
+};
+struct node* add_to_empty(struct node* head,int data)
+{
+	struct node* temp=NULL;
+	temp=(struct node*)malloc(sizeof(struct node));
+	temp->prev=NULL;
+	temp->data=data;
+	temp->next=NULL;  // for inserting the data in node using its node 
+	head=temp;
+	return head;
+};
+
+struct node* add_at_beg(struct node* head,int data)
+{
+	struct node*temp=NULL;
+	temp=(struct node*)malloc(sizeof(struct node));
+	temp->prev=NULL;
+	temp->data=data;
+	temp->next=NULL;   // for inserting the data in the begining of list
+	temp->next=head;
+	head->prev=temp;
+	head=temp;
+	return head;
+};
+
+struct node* add_at_end(struct node* head,int data)
+{
+	struct node*temp=NULL;
+	struct node* tp;
+	temp=(struct node*)malloc(sizeof(struct node));
+	temp->prev=NULL;                        
+	temp->data=data;                 // for inserting data at end
+	temp->next=NULL;
+	tp=head;
+	while(tp->next !=NULL)
+		tp=tp->next;
+		tp->next=temp;
+		temp->prev=tp;
+	return head;
+};
+ 
+struct node* add_after_pos(struct node* head,int data,int position)
+{
+    struct node* newP=NULL;
+    struct node* temp=head;
+    struct node* temp2=NULL;
+    newP=add_to_empty(newP,data);
+    while(position!=1)
+    {
+        temp=temp->next;
+        position--;
+    }
+    if(temp->next=newP)
+    {
+        temp->next=newP;
+        newP->prev=temp;
+    }
+    else
+    {
+        temp2=temp ->next;
+        temp->next=newP;
+        temp->prev=newP;
+        newP->next=temp2;
+        newP->prev=temp;
+    }
+    return head;
+};
+
+struct node* add_before_pos(struct node* head, int data,int position)
+{
+    struct node* newP=NULL;
+    struct node* temp=head;
+    struct node* temp2=NULL;
+    newP=add_to_empty(newP,data);
+    int pos=position;
+    while(pos>2)
+    {
+        temp=temp->next;
+        pos--;
+    }
+    if(position==1)
+    {
+        head=add_at_beg(head,data);
+    }
+    else
+    {
+        temp2=temp->next;
+        temp->next=newP;
+        temp2->prev=newP;
+        newP->next=temp2;
+        newP->prev=temp;
+    }
+    return head;
+};
+struct node* create_list(struct node* head)
+{
+    int n , data , i;
+    cout<<"Enter the numbers of node"<<endl;
+    cin>>n;
+    if(n==0)
+      return head;
+     cout<<"Enter element for node 1"<<endl;
+     cin>>data;
+     head=add_to_empty(head,data);
+     for(i=1;i<n;i++)
+     {
+         cout<<"Enter element for node "<<i+1;
+         cin>>data;
+         head=add_at_end(head,data);
+     }
+     return head;
+};
+int main()
+{
+    struct node* head=NULL;
+    struct node * ptr;
+    head=create_list(head);
+    ptr=head;
+    while(ptr!=NULL)
+    {
+        cout<<ptr->data;
+        ptr=ptr->next;
+    }
+    return 0;
+}
+
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+
+#include<iostream>
+#include<stdio.h>
+#include<stdlib.h>
+using namespace std;
+struct node
+{
+	struct node* prev;
+	int data;
+	struct node* next;
+};
+struct node* add_to_empty(struct node* head,int data)
+{
+	struct node* temp=NULL;
+	temp=(struct node*)malloc(sizeof(struct node));
+	temp->prev=NULL;
+	temp->data=data;
+	temp->next=NULL;  // for inserting the data in node using its node 
+	head=temp;
+	return head;
+};
+
+struct node* add_at_beg(struct node* head,int data)
+{
+	struct node*temp=NULL;
+	temp=(struct node*)malloc(sizeof(struct node));
+	temp->prev=NULL;
+	temp->data=data;
+	temp->next=NULL;   // for inserting the data in the begining of list
+	temp->next=head;
+	head->prev=temp;
+	head=temp;
+	return head;
+};
+
+struct node* add_at_end(struct node* head,int data)
+{
+	struct node*temp=NULL;
+	struct node* tp;
+	temp=(struct node*)malloc(sizeof(struct node));
+	temp->prev=NULL;                        
+	temp->data=data;                 // for inserting data at end
+	temp->next=NULL;
+	tp=head;
+	while(tp->next !=NULL)
+		tp=tp->next;
+		tp->next=temp;
+		temp->prev=tp;
+	return head;
+};
+ 
+struct node* add_after_pos(struct node* head,int data,int position)
+{
+    struct node* newP=NULL;
+    struct node* temp=head;
+    struct node* temp2=NULL;
+    newP=add_to_empty(newP,data);
+    while(position!=1)
+    {
+        temp=temp->next;
+        position--;
+    }
+    if(temp->next=newP)
+    {
+        temp->next=newP;
+        newP->prev=temp;
+    }
+    else
+    {
+        temp2=temp ->next;
+        temp->next=newP;
+        temp->prev=newP;
+        newP->next=temp2;
+        newP->prev=temp;
+    }
+    return head;
+};
+
+struct node* add_before_pos(struct node* head, int data,int position)
+{
+    struct node* newP=NULL;
+    struct node* temp=head;
+    struct node* temp2=NULL;
+    newP=add_to_empty(newP,data);
+    int pos=position;
+    while(pos>2)
+    {
+        temp=temp->next;
+        pos--;
+    }
+    if(position==1)
+    {
+        head=add_at_beg(head,data);
+    }
+    else
+    {
+        temp2=temp->next;
+        temp->next=newP;
+        temp2->prev=newP;
+        newP->next=temp2;
+        newP->prev=temp;
+    }
+    return head;
+};
+
+int main()
+{
+  	struct node* head=NULL;
+  	struct node* ptr;
+  	int position=2;
+    head=add_to_empty(head,200);
+    head=add_at_beg(head,100);
+    head=add_at_end(head,300);
+    head=add_after_pos(head,150,position);
+    head=add_before_pos(head,25,position);
+    ptr=head;
+    while(ptr!=NULL)
+    {
+     cout<<ptr->data<<endl;	
+     ptr=ptr->next;
+    }
+    return 0;
+}
+
+----------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
