@@ -1332,9 +1332,471 @@ int main()
 ----------------------------------------------------------------------------------------------------------
 
 
+#include <iostream>
+#include <map>
+#include <queue>
+using namespace std;
+
+// Tree node structure
+struct TreeNode
+{
+    char data;
+    TreeNode* left;
+    TreeNode* right;
+
+    // Constructor
+    TreeNode(char value)
+    {
+        data = value;
+        left = NULL;
+        right = NULL;
+    }
+};
+
+// Custom comparison struct for priority queue
+struct Compare
+{
+    bool operator()(TreeNode* a, TreeNode* b)
+    {
+        return a->data > b->data;
+    }
+};
+
+// Function to build the Huffman tree
+TreeNode* buildHuffmanTree(const map<char, int>& frequencies)
+{
+    // Create a priority queue (min heap) of tree nodes
+    priority_queue<TreeNode*, vector<TreeNode*>, Compare> pq;
+
+    // Create leaf nodes for each character and add them to the priority queue
+    for (map<char, int>::const_iterator it = frequencies.begin(); it != frequencies.end(); ++it)
+    {
+        char character = it->first;
+        int frequency = it->second;
+        pq.push(new TreeNode(character));
+    }
+
+    // Build the Huffman tree by combining nodes from the priority queue
+    while (pq.size() > 1)
+    {
+        TreeNode* left = pq.top();
+        pq.pop();
+
+        TreeNode* right = pq.top();
+        pq.pop();
+
+        TreeNode* newNode = new TreeNode('#');
+        newNode->left = left;
+        newNode->right = right;
+        pq.push(newNode);
+    }
+
+    // Return the root of the Huffman tree
+    return pq.top();
+}
+
+// Function to generate Huffman codes for each character
+void generateHuffmanCodes(TreeNode* root, string code, map<char, string>& codes)
+{
+    if (root == NULL)
+        return;
+
+    if (root->left == NULL && root->right == NULL)
+    {
+        codes[root->data] = code;
+        return;
+    }
+
+    generateHuffmanCodes(root->left, code + '0', codes);
+    generateHuffmanCodes(root->right, code + '1', codes);
+}
+
+// Function to compress a string using Huffman codes
+string compressString(const string& input, const map<char, string>& codes)
+{
+    string compressedString;
+
+    // Replace each character with its corresponding Huffman code
+    for (size_t i = 0; i < input.length(); ++i)
+    {
+        compressedString += codes.find(input[i])->second;
+    }
+
+    return compressedString;
+}
+
+// Function to decompress a string using Huffman codes
+string decompressString(const string& compressedString, TreeNode* root)
+{
+    string decompressedString;
+
+    TreeNode* currentNode = root;
+    for (size_t i = 0; i < compressedString.length(); ++i)
+    {
+        if (compressedString[i] == '0')
+        {
+            currentNode = currentNode->left;
+        }
+        else if (compressedString[i] == '1')
+        {
+            currentNode = currentNode->right;
+        }
+
+        if (currentNode->left == NULL && currentNode->right == NULL)
+        {
+            decompressedString += currentNode->data;
+            currentNode = root;
+        }
+    }
+
+    return decompressedString;
+}
+
+int main()
+{
+    string input = "Huffman algorithm example";
+
+    // Step 1: Count the frequency of each character in the input string
+    map<char, int> frequencies;
+    for (size_t i = 0; i < input.length(); ++i)
+    {
+        char c = input[i];
+        frequencies[c]++;
+    }
+
+    // Step 2: Build the Huffman tree
+    TreeNode* root = buildHuffmanTree(frequencies);
+
+    // Step 3: Generate Huffman codes for each character
+    map<char, string> codes;
+    generateHuffmanCodes(root, "", codes);
+
+    // Step 4: Compress the input string using Huffman codes
+    string compressedString = compressString(input, codes);
+
+    // Step 5: Decompress the compressed string using Huffman codes
+    string decompressedString = decompressString(compressedString, root);
+
+    // Output
+    cout << "Input string: " << input << endl;
+    cout << "Compressed string: " << compressedString << endl;
+    cout << "Decompressed string: " << decompressedString << endl;
+
+    return 0;
+}
+
+_________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
 
 
+										// QUEUE USING LINKED LIST
+#include<iostream>
+#include<stdlib.h>
+using namespace std;
+
+// FOR IMPLEMENTING STRUCTURE 
+typedef struct node
+{
+	int data;
+	struct node* next;
+}node1;
+
+node1* front = NULL;
+node1* rear = NULL;
+
+// FOR ENTERING THE DATA IN THE QUEUE
+void enqueue()
+{
+	node1* temp;
+	temp = (struct node*)malloc(sizeof(struct node));
+	cout << "Enter data: ";
+	cin >> temp->data;
+	if (front == NULL)
+	{
+		temp->next = NULL;
+		front = temp;
+		rear = temp;
+	}
+	else
+	{
+		rear->next = temp;
+		rear = temp;
+		rear->next = NULL;
+	}
+}
+
+// FOR DELETING THE DATA FROM QUEUE
+void dequeue()
+{
+	node1* temp;
+	struct node* ptr = NULL;
+	ptr = front;
+	front = front->next;
+	cout << "Deleted element is " << ptr->data << endl;
+	free(ptr);
+}
+
+// FOR DISPLAYING THE DATA FROM THE QUEUE
+void display()
+{
+	node1* ptr;
+	if (front == NULL)
+	{
+		cout << "Queue is empty" << endl;
+	}
+	else
+	{
+		for (ptr = front; ptr != NULL; ptr = ptr->next)
+		{
+			cout << ptr->data << " ";
+		}
+		cout << endl;
+	}
+}
+
+int main()
+{
+	int ch;
+	while (1)
+	{
+		cout << "1. Enqueue" << endl;
+		cout << "2. Dequeue" << endl;
+		cout << "3. Display" << endl;
+		cout << "4. Exit" << endl;
+		cout << "Enter your choice: ";
+		cin >> ch;
+
+		switch (ch)
+		{
+		case 1:
+			enqueue();
+			break;
+
+		case 2:
+			dequeue();
+			break;
+
+		case 3:
+			display();
+			break;
+
+		case 4:
+			exit(1);
+			break;
+
+		default:
+			cout << "Entered choice is invalid" << endl;
+		}
+	}
+	return 0;
+}
+
+__________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+
+								// STACK IMPLEMENTING USING THE LINKED LIST
+#include <iostream>
+#include<stdlib.h>
+using namespace std;
+// CREATING STRUCTURE OF THE LINKED LIST
+struct node
+{
+ int data;
+ struct node*link;
+}*top=NULL;
+
+// TO CHECK WHETHER IT IS EMPTY OR NOT
+int isEmpty()
+{
+	if(top==NULL)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+// FOR ENTERING DATA IN THE STACK 
+void push(int data)
+{
+    struct node*newnode;
+    newnode=(struct node*)malloc(sizeof(struct node));
+    if(newnode==NULL)
+    {
+        cout<<"Stack overflow\n";
+        exit(1);
+    }
+    newnode->data=data;
+    newnode->link=NULL;
+    
+    newnode->link=top;
+    top=newnode;
+}
+
+// FOR DELETING THE DATA FROM STACK
+int pop()
+{
+	struct node*temp;
+	int val;
+	if(isEmpty())
+	{
+		cout<<"Stack underflow"<<endl;
+		exit(1);
+	}
+	temp=top;
+	val=temp->data;
+	top=top->link;
+	free(temp);
+	temp=NULL;
+	return val;
+}
+
+// FOR RETURNING THE DATA USER WANT TO SEE
+int peek()
+{
+	if(isEmpty())
+	{
+		cout<<"Stack is underflow"<<endl;
+		exit(1);
+	}
+	return top->data;
+}
+void print()
+{
+    struct node*temp;
+    temp=top;
+    cout<<"Element of the stack are-->"<<endl;
+    while(temp)
+    {
+        cout<<temp->data<<endl;
+        temp=temp->link;
+    }
+    cout<<"\n";
+}
+
+// MAIN FUNCTION 
+int main()
+{
+    int choice;
+    int data;
+    while(1)
+    {
+       
+        cout<<"1.Push"<<endl;
+        cout<<"2.Pop"<<endl;
+        cout<<"3.Print top element"<<endl;
+        cout<<"4.Print all element"<<endl;
+        cout<<"5.Quit"<<endl;
+        cout<<"Enter your choice"<<endl;
+        cin>>choice;
+        
+        switch(choice)
+        {
+            case 1 : cout<<"Enter element to push in the stack"<<endl;
+            cin>>data;
+            push(data);
+            break;
+            
+            case 2: data=pop();
+                    cout<<"Deleted element is "<<data<<endl;
+            break;
+            
+            case 3:cout<<"Top element of the list "<<peek()<<endl;
+            break;
+            
+            case 4: cout<<"All element are"<<endl;
+                    print();
+            break;
+            
+            case 5: exit(1);
+            
+            default:
+                cout<<"Wrong choice"<<endl;
+            break;
+        }
+    }
+    return 0;
+}
+
+_________________________________________________________________________________________________________________________________________________________________________________________________________
+
+#include<iostream>
+using namespace std;
+# define n 100
+class stack
+{
+	private:
+		int * arr;
+		int top;
+	public:
+		stack()
+		{
+			arr=new int[n];
+			top=-1;
+		}
+		void push(int x)
+		{
+			if(top==n-1)
+			{
+				cout<<"Stack overflow\n";
+				return ;
+			}
+			top++;
+			arr[top]=x;
+		}
+		void pop()
+		{
+			if(top==-1)
+			{
+				cout<<"no elemen to pop\n";
+				return ;
+			}
+			top--;
+		}
+		int Top()
+		{
+			if(top==-1)
+			{
+				cout<<"no elemen to pop\n";
+				return -1 ;
+			}
+			return arr[top];
+		}
+		
+		bool empty()
+		{
+			return top==-1;
+		}
+};
+void displayStack(stack s)       // this will display the element of stack in the order 
+{
+    if (s.empty())
+    {
+        cout << "Stack is empty." << endl;
+        return;
+    }
+
+    cout << "Elements of the stack: "<<endl;
+    while (!s.empty())
+    {
+        cout << s.Top()<<endl;
+        s.pop();
+    }
+    cout << endl;
+}
+int main()
+{
+	stack s1;
+	s1.push(100);
+	s1.push(200);
+	s1.push(300);
+	cout<<s1.Top()<<endl;
+    displayStack(s1);
+	return 0;
+}
+____________________________________________________________________________________________________________________________________________________________________________________________________________
 
 
 
